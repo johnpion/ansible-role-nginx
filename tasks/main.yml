@@ -1,0 +1,6 @@
+- include: "install-{{ nginx_version }}.yml"
+  # when: nginx_enabled
+
+- include: config.yml
+  # when: nginx_enabled
+  tags: nginx_config

@@ -1,0 +1,13 @@
+galaxy_info:
+  author:              John Seregin seregin.john@gmail.com
+  license:             license Apache-2.0
+  min_ansible_version: 2.9
+  description:         nginx
+
+  platforms:
+  - name:              Debian
+    versions:
+    - wheezy
+    - stretch
+    - buster
+    - bullseye

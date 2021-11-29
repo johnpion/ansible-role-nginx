@@ -1,0 +1,10 @@
+- apt:
+    repo:         "deb http://nginx.org/packages/mainline/debian/ {{ ansible_distribution_release }} nginx"
+
+- apt_key:
+    url:          http://nginx.org/keys/nginx_signing.key
+    state:        present
+
+- apt:
+    pkg:          nginx
+    update_cache: true

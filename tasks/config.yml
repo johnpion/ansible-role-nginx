@@ -1,0 +1,30 @@
+- name: "nginx : delete default config from sites-enabled"
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  register: nginx_sync
+  when: nginx_delete_default_config
+
+- delegate_to: localhost
+  stat:
+    path: files/{{ inventory_hostname }}/nginx
+  register: nginx_config_files
+
+- copy:
+    src: files/{{ inventory_hostname }}/nginx
+    dest: /etc/
+    owner: root
+    group: root
+    decrypt: true
+  register: nginx_sync
+  when: nginx_config_files.stat.exists
+
+- shell: nginx -t
+  register: nginx_validate
+  when: nginx_sync.changed
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+  when: nginx_validate
