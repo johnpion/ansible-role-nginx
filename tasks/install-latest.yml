@@ -1,9 +1,23 @@
 - apt:
-    repo:         "deb http://nginx.org/packages/mainline/debian/ {{ ansible_distribution_release }} nginx"
+    pkg:          gpg
+    update_cache: true
 
 - apt_key:
     url:          http://nginx.org/keys/nginx_signing.key
     state:        present
+
+- apt_repository:
+    repo:         "deb http://nginx.org/packages/mainline/debian/ {{ ansible_distribution_release }} nginx"
+  register:       nginx_repo
+
+- apt:
+    pkg:          nginx
+    state:        absent
+  when:           nginx_repo.changed
+  
+- copy:
+    src:          99nginx
+    dest:         /etc/apt/preferences.d/99nginx
 
 - apt:
     pkg:          nginx
