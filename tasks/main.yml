@@ -1,6 +1,4 @@
 - include_tasks: "install.yml"
-  # when: nginx_enabled
 
 - include_tasks: config.yml
-  # when: nginx_enabled
   tags: nginx_config
