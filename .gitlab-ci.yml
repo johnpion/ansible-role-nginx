@@ -16,6 +16,7 @@ push_to_github:
     - git tag -l | xargs -I@ git push ~/tmp/$ROLE @:refs/tags/@
     - rsync -ar --exclude .git --exclude .gitlab-ci.yml --exclude local ./ ~/tmp/$ROLE/
     - cd ~/tmp/$ROLE
+    - git branch -M main
     - git add .
     - echo "$COMMIT_MESSAGE"
     - git commit -m "$COMMIT_MESSAGE"
