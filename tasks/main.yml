@@ -1,4 +1,6 @@
-- include_tasks: "install.yml"
+- name: Install
+  ansible.builtin.include_tasks: install.yml
 
-- include_tasks: config.yml
+- name: Config
+  ansible.builtin.include_tasks: config.yml
   tags: nginx_config
