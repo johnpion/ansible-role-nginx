@@ -1,31 +1,33 @@
-- name:           install gpg
-  apt:
-    pkg:          gpg
+- name: Install gpg
+  ansible.builtin.apt:
+    pkg: gpg
     update_cache: true
 
-- name:           install apt_key
-  apt_key:
-    url:          http://nginx.org/keys/nginx_signing.key
-    state:        present
+- name: Install apt_key
+  ansible.builtin.apt_key:
+    url: http://nginx.org/keys/nginx_signing.key
+    state: present
 
-- name:           add repo
-  apt_repository:
-    repo:         "deb http://nginx.org/packages/mainline/debian/ {{ ansible_distribution_release }} nginx"
-  register:       nginx_repo
+- name: Add repo
+  ansible.builtin.apt_repository:
+    repo: "deb http://nginx.org/packages/mainline/debian/ {{ ansible_distribution_release }} nginx"
+  register: nginx_repo
 
-- name:           delete old nginx
-  apt:
-    pkg:          nginx
-    state:        absent
-  when:           nginx_repo.changed
+- name: Delete old nginx
+  ansible.builtin.apt:
+    pkg: nginx
+    state: absent
+  when: nginx_repo.changed
+  tags:
+    - skip_ansible_lint
 
-- name:           copy apt preferences
-  copy:
-    src:          99nginx
-    dest:         /etc/apt/preferences.d/99nginx
-    mode:         0644
+- name: Copy apt preferences
+  ansible.builtin.copy:
+    src: 99nginx
+    dest: /etc/apt/preferences.d/99nginx
+    mode: "0644"
 
-- name:           install nginx
-  apt:
-    pkg:          nginx
+- name: Install nginx
+  ansible.builtin.apt:
+    pkg: nginx
     update_cache: true
