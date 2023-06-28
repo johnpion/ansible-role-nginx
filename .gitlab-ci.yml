@@ -1,0 +1,33 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+  - push_to_github
+  - import_to_ansible_galaxy
+
+push_to_github:
+  stage: push_to_github
+  script:
+    - ROLE=$(grep role_name meta/main.yml | awk '{print $2}')
+    - COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+    - mkdir -p ~/tmp
+    - rm -rf ~/tmp/$ROLE
+    - git clone git@github.com:johnpion/ansible-role-$ROLE.git ~/tmp/$ROLE
+    - git tag -l | xargs -I@ git push ~/tmp/$ROLE @:refs/tags/@
+    - rsync -ar --exclude .git --exclude .gitlab-ci.yml --exclude local ./ ~/tmp/$ROLE/
+    - cd ~/tmp/$ROLE
+    - git add .
+    - echo "$COMMIT_MESSAGE"
+    - git commit -m "$COMMIT_MESSAGE"
+    - git push origin main
+    - git push --tags
+  only:
+    - main
+
+import_to_ansible_galaxy:
+  stage: import_to_ansible_galaxy
+  script:
+    - ROLE=$(grep role_name meta/main.yml | awk '{print $2}')
+    - ansible-galaxy role import johnpion ansible-role-$ROLE
+  only:
+    - main

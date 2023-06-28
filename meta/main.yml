@@ -1,13 +1,12 @@
 galaxy_info:
-  author:              John Seregin seregin.john@gmail.com
-  license:             license Apache-2.0
-  min_ansible_version: 2.9
-  description:         nginx
-
+  author: Ivan Serohin
+  license: license Apache-2.0
+  role_name: nginx
+  namespace: johnpion
+  description: ansible role 'nginx'
+  min_ansible_version: '2.14'
   platforms:
-  - name:              Debian
-    versions:
-    - wheezy
-    - stretch
-    - buster
-    - bullseye
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
