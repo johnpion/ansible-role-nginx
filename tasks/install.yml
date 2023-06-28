@@ -1,0 +1,31 @@
+- name:           install gpg
+  apt:
+    pkg:          gpg
+    update_cache: true
+
+- name:           install apt_key
+  apt_key:
+    url:          http://nginx.org/keys/nginx_signing.key
+    state:        present
+
+- name:           add repo
+  apt_repository:
+    repo:         "deb http://nginx.org/packages/mainline/debian/ {{ ansible_distribution_release }} nginx"
+  register:       nginx_repo
+
+- name:           delete old nginx
+  apt:
+    pkg:          nginx
+    state:        absent
+  when:           nginx_repo.changed
+
+- name:           copy apt preferences
+  copy:
+    src:          99nginx
+    dest:         /etc/apt/preferences.d/99nginx
+    mode:         0644
+
+- name:           install nginx
+  apt:
+    pkg:          nginx
+    update_cache: true
