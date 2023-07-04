@@ -53,9 +53,9 @@
 
 - name: Check configs
   ansible.builtin.shell: nginx -t
-  warn: false  # E301
   register: nginx_validate
   when: nginx_sync.changed
+  tags: skip_ansible_lint
 
 - name: Restart nginx
   ansible.builtin.service:
